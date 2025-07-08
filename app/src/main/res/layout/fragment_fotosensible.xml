@@ -46,13 +46,23 @@
         app:layout_constraintTop_toBottomOf="@id/txt_estado" />
 
     <TextView
-        android:id="@+id/txtGas"
+        android:id="@+id/txt_ldr"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Gas: -- ppm"
+        android:text="Valor LDR: -- "
         android:textSize="28sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btn_select" />
+
+    <TextView
+        android:id="@+id/txt_luz"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Luz: -- %"
+        android:textSize="28sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txt_ldr" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -46,11 +46,11 @@
         app:layout_constraintTop_toBottomOf="@id/txt_estado" />
 
     <TextView
-        android:id="@+id/txtDist"
+        android:id="@+id/txt_mov"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Distancia: -- cm"
+        android:text="Movimiento: --"
         android:textSize="28sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btn_select" />

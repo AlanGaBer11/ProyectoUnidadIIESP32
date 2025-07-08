@@ -55,15 +55,14 @@ public class Dht11Fragment extends Fragment {
 
         vm = new ViewModelProvider(requireActivity()).get(SharedBluetoothViewModel.class);
         btAdapter = BluetoothAdapter.getDefaultAdapter();
-        pedirPermisoBt();
 
         vm.getEstado().observe(getViewLifecycleOwner(),
                 estado -> binding.txtEstado.setText("Estado: " + estado));
 
         vm.getDht().observe(getViewLifecycleOwner(), d -> {
             if (d != null) {
-                binding.txtTemp.setText("Temp: " + d.temperatura + " °C");
-                binding.txtHum.setText("Hum: " + d.humedad + " %");
+                binding.txtHum.setText("Humedad: " + d.humedad + " %");
+                binding.txtTemp.setText("Temperatura: " + d.temperatura + " °C");
             }
         });
 
@@ -92,18 +91,6 @@ public class Dht11Fragment extends Fragment {
                 .setTitle("Selecciona dispositivo")
                 .setItems(items, (d, idx) -> vm.conectar(devs.get(idx)))
                 .show();
-    }
-
-    private void pedirPermisoBt() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
-                ContextCompat.checkSelfPermission(requireContext(),
-                        Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-            registerForActivityResult(new ActivityResultContracts.RequestPermission(),
-                    ok -> {
-                        if (!ok) toast("Permiso BLUETOOTH_CONNECT denegado");
-                    })
-                    .launch(Manifest.permission.BLUETOOTH_CONNECT);
-        }
     }
 
     private void toast(String s) {

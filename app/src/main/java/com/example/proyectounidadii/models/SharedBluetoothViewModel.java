@@ -4,6 +4,7 @@ import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.util.Log;
 
 import androidx.annotation.RequiresPermission;
 import androidx.lifecycle.LiveData;
@@ -50,17 +51,28 @@ public class SharedBluetoothViewModel extends ViewModel {
     @RequiresPermission(allOf = {Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT})
     public void conectar(BluetoothDevice device) {
         if (rxThread != null) rxThread.interrupt();
-        estado.postValue("Conectando…");
+        estado.postValue("Conectando...");
 
         rxThread = new Thread(() -> {
             try {
+                if (socket != null && socket.isConnected()) {
+                    socket.close(); // ✅ evitar socket ocupado
+                }
+
                 socket = device.createRfcommSocketToServiceRecord(SPP_UUID);
                 BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
                 socket.connect();
-                in = socket.getInputStream();
-                estado.postValue("Conectado a " + device.getName() + " ...");
-                leerDatos();
+
+                if (socket.isConnected()) {
+                    in = socket.getInputStream();
+                    estado.postValue("Conectado a " + device.getName());
+                    leerDatos();
+                } else {
+                    estado.postValue("Error de conexión");
+                }
+
             } catch (IOException e) {
+                e.printStackTrace();
                 estado.postValue("Error de conexión");
             }
         });
@@ -78,44 +90,55 @@ public class SharedBluetoothViewModel extends ViewModel {
                 if (n > 0) {
                     sb.append(new String(buffer, 0, n));
                     int idx;
-                    while ((idx = sb.indexOf("#")) != -1) {  // MARCO DE FIN DE TRAMA ‘#’
+                    while ((idx = sb.indexOf("#")) != -1) {
                         String trama = sb.substring(0, idx);
                         procesarTrama(trama);
+                        sb.delete(0, idx + 1);  // ✅ eliminar parte ya leída
                     }
                 }
             } catch (IOException e) {
+                e.printStackTrace();  // ✅ ver en logcat
                 estado.postValue("Desconectado");
                 break;
             }
         }
     }
 
+
     // --- METODO PARA PROCESAR LA TRAMA DEL BLUETOOTH ERROR ---
     private void procesarTrama(String t) {
+        Log.d("TRAMA_BT", "Trama recibida: " + t);
+
         if (t.startsWith("$DHT")) {
-            Pattern p = Pattern.compile("HUM:(\\d+)%.*TEMP:\\s*(\\d+)");
+            Pattern p = Pattern.compile("Humedad:\\$(\\d+)\\$%; Temperatura:\\$(\\d+)\\$C°"); // DHT
+
             Matcher m = p.matcher(t);
             if (m.find()) {
                 int hum = Integer.parseInt(m.group(1));
                 int temp = Integer.parseInt(m.group(2));
                 dht.postValue(new DhtData(temp, hum));
+                Log.d("DHT_DATA", "Temp=" + temp + ", Hum=" + hum);
             }
         } else if (t.startsWith("$LDR")) {
-            Pattern p = Pattern.compile("Valor:(\\d+);\\s*Luz:(\\d+)%");
+            Pattern p = Pattern.compile("Valor:\\s*(\\d+);\\s*Luz:\\s*(\\d+)%"); // FOTORESISTENCIA
             Matcher m = p.matcher(t);
             if (m.find()) {
                 int valor = Integer.parseInt(m.group(1));
                 int luz = Integer.parseInt(m.group(2));
                 fotosensible.postValue(new FotosensibleData(valor, luz));
+                Log.d("LDR_DATA", "Raw=" + valor + ", Luz=" + luz);
             }
-        } else if (t.startsWith("$MOV")) {
+        } else if (t.startsWith("$MOV")) { // MOVIMIENTO
             if (t.contains("Detectado")) {
                 movimiento.postValue(new MovimientoData(true));
+                Log.d("MOV_DATA", "Movimiento detectado");
             } else if (t.contains("No Detectado")) {
                 movimiento.postValue(new MovimientoData(false));
+                Log.d("MOV_DATA", "Movimiento NO detectado");
             }
         }
     }
+
 
 
     // --- METODO PARA DESCONECTAR EL BLUETOOTH ---
