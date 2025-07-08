@@ -92,35 +92,31 @@ public class SharedBluetoothViewModel extends ViewModel {
 
     // --- METODO PARA PROCESAR LA TRAMA DEL BLUETOOTH ERROR ---
     private void procesarTrama(String t) {
-        // Ejemplos de trama enviados desde el ESP32:
-        //   $DHT:Hum:45:Temp:23$
-        //   $HC:Dist:178$
-        //   $MQ:Gas:402$
-
         if (t.startsWith("$DHT")) {
-            Pattern p = Pattern.compile("\\$DHT:Hum:(\\d+):Temp:(\\d+)");
+            Pattern p = Pattern.compile("HUM:(\\d+)%.*TEMP:\\s*(\\d+)");
             Matcher m = p.matcher(t);
             if (m.find()) {
                 int hum = Integer.parseInt(m.group(1));
                 int temp = Integer.parseInt(m.group(2));
                 dht.postValue(new DhtData(temp, hum));
             }
-        } else if (t.startsWith("$HC")) {
-            Pattern p = Pattern.compile("\\$HC:Dist:(\\d+)");
+        } else if (t.startsWith("$LDR")) {
+            Pattern p = Pattern.compile("Valor:(\\d+);\\s*Luz:(\\d+)%");
             Matcher m = p.matcher(t);
             if (m.find()) {
-                float cm = Float.parseFloat(m.group(1));
-                movimiento.postValue(new MovimientoData(cm));
+                int valor = Integer.parseInt(m.group(1));
+                int luz = Integer.parseInt(m.group(2));
+                fotosensible.postValue(new FotosensibleData(valor, luz));
             }
-        } else if (t.startsWith("$MQ")) {
-            Pattern p = Pattern.compile("\\$MQ:Gas:(\\d+)");
-            Matcher m = p.matcher(t);
-            if (m.find()) {
-                int ppm = Integer.parseInt(m.group(1));
-                fotosensible.postValue(new FotosensibleData(ppm));
+        } else if (t.startsWith("$MOV")) {
+            if (t.contains("Detectado")) {
+                movimiento.postValue(new MovimientoData(true));
+            } else if (t.contains("No Detectado")) {
+                movimiento.postValue(new MovimientoData(false));
             }
         }
     }
+
 
     // --- METODO PARA DESCONECTAR EL BLUETOOTH ---
     public void desconectar() {
@@ -150,21 +146,23 @@ public class SharedBluetoothViewModel extends ViewModel {
         }
     }
 
-    // --- SENSOR DE MOVIMIENTO ---
-    public static class MovimientoData {
-        public final float distancia; // CM
+    // --- SENSOR FOTOSENSIBLE
+    public static class FotosensibleData {
+        public final int valorRaw;  // Valor analógico
+        public final int luz;       // Porcentaje
 
-        public MovimientoData(float cm) {
-            distancia = cm;
+        public FotosensibleData(int valor, int luz) {
+            this.valorRaw = valor;
+            this.luz = luz;
         }
     }
 
-    // --- SENSOR FOTOSENSIBLE
-    public static class FotosensibleData {
-        public final int gas; // PPM
+    // --- SENSOR DE MOVIMIENTO ---
+    public static class MovimientoData {
+        public final boolean detectado; // SI ? NO
 
-        public FotosensibleData(int ppm) {
-            gas = ppm;
+        public MovimientoData(boolean detectado) {
+            this.detectado = detectado;
         }
     }
 

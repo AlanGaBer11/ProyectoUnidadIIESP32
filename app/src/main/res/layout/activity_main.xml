@@ -29,17 +29,18 @@
             android:text="DHT11" />
 
         <Button
+            android:id="@+id/btn_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Fotosensible" />
+
+        <Button
             android:id="@+id/btn_movement"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Movimiento" />
 
-        <Button
-            android:id="@+id/btn_photo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Fotosensible" />
     </LinearLayout>
 </LinearLayout>

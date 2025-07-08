@@ -22,8 +22,9 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Dht11Fragment()).commit();
 
         binding.btnDht11.setOnClickListener(view -> showFragment(new Dht11Fragment()));
-        binding.btnMovement.setOnClickListener(view -> showFragment(new MovimientoFragment()));
         binding.btnPhoto.setOnClickListener(view -> showFragment(new FotosensibleFragment()));
+        binding.btnMovement.setOnClickListener(view -> showFragment(new MovimientoFragment()));
+
 
     }
 
