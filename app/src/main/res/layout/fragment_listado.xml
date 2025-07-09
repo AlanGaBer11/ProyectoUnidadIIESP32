@@ -2,20 +2,20 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/frameLayout3"
+    android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context=".ui.fotosensible.FotosensibleFragment">
+    tools:context=".ui.listado.ListadoFragment">
 
     <!-- Título centrado -->
     <TextView
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:gravity="center"
-        android:text="Sensor Fotosensible"
+        android:text="Dispositivos Conectados"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -31,9 +31,11 @@
         android:text="Estado: Desconectado"
         android:textColor="#555"
         android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/btn_select"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintVertical_bias="0.5" />
 
     <!-- Botón para seleccionar dispositivo -->
     <Button
@@ -42,27 +44,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:text="Seleccionar dispositivo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txt_estado" />
+        app:layout_constraintTop_toBottomOf="@+id/txt_estado"
+        app:layout_constraintVertical_bias="0.5" />
 
-    <TextView
-        android:id="@+id/txt_ldr"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Valor LDR: -- "
-        android:textSize="28sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btn_select" />
-
-    <TextView
-        android:id="@+id/txt_luz"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Luz: -- %"
-        android:textSize="28sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txt_ldr" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

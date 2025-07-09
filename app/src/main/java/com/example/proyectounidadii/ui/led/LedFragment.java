@@ -1,4 +1,4 @@
-package com.example.proyectounidadii.ui.movimiento;
+package com.example.proyectounidadii.ui.led;
 
 import android.os.Bundle;
 
@@ -10,10 +10,10 @@ import android.view.ViewGroup;
 
 import com.example.proyectounidadii.R;
 
-public class MovimientoFragment extends Fragment {
+public class LedFragment extends Fragment {
 
 
-    public MovimientoFragment() {
+    public LedFragment() {
         // Required empty public constructor
     }
 
@@ -22,6 +22,6 @@ public class MovimientoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_movimiento, container, false);
+        return inflater.inflate(R.layout.fragment_led, container, false);
     }
 }

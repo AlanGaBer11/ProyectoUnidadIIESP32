@@ -17,9 +17,9 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.proyectounidadii.databinding.ActivityMainBinding;
 import com.example.proyectounidadii.models.SharedBluetoothViewModel;
-import com.example.proyectounidadii.ui.dht.Dht11Fragment;
-import com.example.proyectounidadii.ui.fotosensible.FotosensibleFragment;
-import com.example.proyectounidadii.ui.movimiento.MovimientoFragment;
+import com.example.proyectounidadii.ui.listado.ListadoFragment;
+import com.example.proyectounidadii.ui.sensores.SensoresFragment;
+import com.example.proyectounidadii.ui.led.LedFragment;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -50,11 +50,11 @@ public class MainActivity extends AppCompatActivity {
 
         pedirPermisosBluetooth();
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Dht11Fragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ListadoFragment()).commit();
 
-        binding.btnDht11.setOnClickListener(view -> showFragment(new Dht11Fragment()));
-        binding.btnPhoto.setOnClickListener(view -> showFragment(new FotosensibleFragment()));
-        binding.btnMovement.setOnClickListener(view -> showFragment(new MovimientoFragment()));
+        binding.btnListado.setOnClickListener(view -> showFragment(new ListadoFragment()));
+        binding.btnSensores.setOnClickListener(view -> showFragment(new SensoresFragment()));
+        binding.btnLed.setOnClickListener(view -> showFragment(new LedFragment()));
     }
 
     private void showFragment(Fragment fragment) {

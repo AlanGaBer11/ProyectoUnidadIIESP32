@@ -27,25 +27,25 @@
         >
 
         <Button
-            android:id="@+id/btn_dht11"
+            android:id="@+id/btn_listado"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="DHT11" />
+            android:text="Disp. Conectados" />
 
         <Button
-            android:id="@+id/btn_photo"
+            android:id="@+id/btn_sensores"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Fotosensible" />
+            android:text="Sensores" />
 
         <Button
-            android:id="@+id/btn_movement"
+            android:id="@+id/btn_led"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Movimiento" />
+            android:text="Led" />
 
     </LinearLayout>
 </LinearLayout>

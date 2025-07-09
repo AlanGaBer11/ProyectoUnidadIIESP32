@@ -1,4 +1,4 @@
-package com.example.proyectounidadii.ui.dht;
+package com.example.proyectounidadii.ui.listado;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -17,23 +17,23 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.proyectounidadii.MainActivity;
-import com.example.proyectounidadii.databinding.FragmentDht11Binding;
+import com.example.proyectounidadii.databinding.FragmentListadoBinding;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class Dht11Fragment extends Fragment {
-    private FragmentDht11Binding binding;
+public class ListadoFragment extends Fragment {
+    private FragmentListadoBinding binding;
     private BluetoothAdapter btAdapter;
 
-    public Dht11Fragment() {
+    public ListadoFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentDht11Binding.inflate(inflater, container, false);
+        binding = FragmentListadoBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -53,14 +53,14 @@ public class Dht11Fragment extends Fragment {
                 estado -> binding.txtEstado.setText("Estado: " + estado));
 
         // Observa datos DHT
-        main.getDht().observe(getViewLifecycleOwner(), d -> {
-            if (d != null) {
-                binding.txtHum.setText("Humedad: " + d.humedad + " %");
-                binding.txtTemp.setText("Temperatura: " + d.temperatura + " °C");
-            }
-        });
-
-        binding.btnSelect.setOnClickListener(v -> mostrarEmparejados(main));
+//        main.getDht().observe(getViewLifecycleOwner(), d -> {
+//            if (d != null) {
+//                binding.txtHum.setText("Humedad: " + d.humedad + "%");
+//                binding.txtTemp.setText("Temperatura: " + d.temperatura + "°C");
+//            }
+//        });
+//
+      binding.btnSelect.setOnClickListener(v -> mostrarEmparejados(main));
     }
 
     @RequiresPermission(allOf = {

@@ -1,4 +1,4 @@
-package com.example.proyectounidadii.ui.fotosensible;
+package com.example.proyectounidadii.ui.sensores;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresPermission;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,21 +17,20 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.proyectounidadii.MainActivity;
-import com.example.proyectounidadii.R;
-import com.example.proyectounidadii.databinding.FragmentFotosensibleBinding;
+import com.example.proyectounidadii.databinding.FragmentSensoresBinding;
 import com.example.proyectounidadii.models.SharedBluetoothViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class FotosensibleFragment extends Fragment {
-    private FragmentFotosensibleBinding binding;
+public class SensoresFragment extends Fragment {
+    private FragmentSensoresBinding binding;
     private SharedBluetoothViewModel vm;
     private BluetoothAdapter btAdapter;
 
 
-    public FotosensibleFragment() {
+    public SensoresFragment() {
         // Required empty public constructor
     }
 
@@ -40,7 +38,7 @@ public class FotosensibleFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding = FragmentFotosensibleBinding.inflate(inflater, container, false);
+        binding = FragmentSensoresBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -52,16 +50,19 @@ public class FotosensibleFragment extends Fragment {
         btAdapter = BluetoothAdapter.getDefaultAdapter();
         MainActivity main = (MainActivity) requireActivity();
 
-        main.getEstado().observe(getViewLifecycleOwner(), estado -> binding.txtEstado.setText("Estado: " + estado));
+        main.getDht().observe(getViewLifecycleOwner(), d -> {
+            if (d != null) {
+                binding.txtHum.setText("Humedad: " + d.humedad + "%");
+                binding.txtTemp.setText("Temperatura: " + d.temperatura + "°C");
+            }
+        });
 
         main.getFotosensible().observe(getViewLifecycleOwner(), d -> {
             if (d != null) {
                 binding.txtLdr.setText("LDR: " + d.valorRaw);
-                binding.txtLuz.setText("Luz: " + d.luz + " %");
+                binding.txtLuz.setText("Luz: " + d.luz + "%");
             }
         });
-
-        binding.btnSelect.setOnClickListener(v -> mostrarEmparejados(main));
     }
 
     @RequiresPermission(allOf = {Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT})
