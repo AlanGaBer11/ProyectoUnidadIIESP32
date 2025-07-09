@@ -25,12 +25,14 @@ public class SharedBluetoothViewModel extends ViewModel {
         }
     }
 
-    // --- SENSOR DE MOVIMIENTO ---
-    public static class MovimientoData {
-        public final boolean detectado; // true / false
+    // --- CONTROL DE LED ---
+    public static class LedData {
+        public final boolean estado; // true = encendido, false = apagado
 
-        public MovimientoData(boolean detectado) {
-            this.detectado = detectado;
+        public LedData(boolean estado) {
+            this.estado = estado;
+
         }
     }
+
 }

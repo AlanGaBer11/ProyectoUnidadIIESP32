@@ -39,8 +39,8 @@ public class MainActivity extends AppCompatActivity {
 
     private final MutableLiveData<String> estado = new MutableLiveData<>("Desconectado");
     private final MutableLiveData<SharedBluetoothViewModel.DhtData> dht = new MutableLiveData<>();
-    private final MutableLiveData<SharedBluetoothViewModel.MovimientoData> movimiento = new MutableLiveData<>();
     private final MutableLiveData<SharedBluetoothViewModel.FotosensibleData> fotosensible = new MutableLiveData<>();
+    private final MutableLiveData<SharedBluetoothViewModel.LedData> led = new MutableLiveData<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
                 fotosensible.postValue(new SharedBluetoothViewModel.FotosensibleData(valor, luz));
                 Log.d("LDR_DATA", "Raw=" + valor + ", Luz=" + luz);
             }
-        } else if (t.startsWith("$MOV")) {
+        } else if (t.startsWith("$MOV")) { // REMPLAZAR POR EL LED
             if (t.contains("Detectado")) {
                 movimiento.postValue(new SharedBluetoothViewModel.MovimientoData(true));
                 Log.d("MOV_DATA", "Movimiento detectado");

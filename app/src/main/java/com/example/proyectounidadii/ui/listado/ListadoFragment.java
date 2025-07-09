@@ -51,15 +51,6 @@ public class ListadoFragment extends Fragment {
         // Observa estado
         main.getEstado().observe(getViewLifecycleOwner(),
                 estado -> binding.txtEstado.setText("Estado: " + estado));
-
-        // Observa datos DHT
-//        main.getDht().observe(getViewLifecycleOwner(), d -> {
-//            if (d != null) {
-//                binding.txtHum.setText("Humedad: " + d.humedad + "%");
-//                binding.txtTemp.setText("Temperatura: " + d.temperatura + "°C");
-//            }
-//        });
-//
       binding.btnSelect.setOnClickListener(v -> mostrarEmparejados(main));
     }
 

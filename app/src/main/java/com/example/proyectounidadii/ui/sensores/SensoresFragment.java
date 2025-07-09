@@ -26,7 +26,6 @@ import java.util.Set;
 
 public class SensoresFragment extends Fragment {
     private FragmentSensoresBinding binding;
-    private SharedBluetoothViewModel vm;
     private BluetoothAdapter btAdapter;
 
 
@@ -49,6 +48,10 @@ public class SensoresFragment extends Fragment {
 
         btAdapter = BluetoothAdapter.getDefaultAdapter();
         MainActivity main = (MainActivity) requireActivity();
+
+        // Observa estado
+        main.getEstado().observe(getViewLifecycleOwner(),
+                estado -> binding.txtEstado.setText("Estado: " + estado));
 
         main.getDht().observe(getViewLifecycleOwner(), d -> {
             if (d != null) {
