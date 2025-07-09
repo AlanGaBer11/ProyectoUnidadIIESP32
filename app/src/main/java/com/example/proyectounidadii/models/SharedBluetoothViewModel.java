@@ -110,7 +110,7 @@ public class SharedBluetoothViewModel extends ViewModel {
         Log.d("TRAMA_BT", "Trama recibida: " + t);
 
         if (t.startsWith("$DHT")) {
-            Pattern p = Pattern.compile("Humedad:\\$(\\d+)\\$%; Temperatura:\\$(\\d+)\\$C°"); // DHT
+            Pattern p = Pattern.compile("Humedad:(\\d+)%;\\s*Temperatura:(\\d+)C°"); // DHT
 
             Matcher m = p.matcher(t);
             if (m.find()) {
