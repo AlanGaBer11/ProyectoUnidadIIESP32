@@ -1,9 +1,11 @@
 package com.example.proyectounidadii.ui.led;
 
+import android.Manifest;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresPermission;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -30,6 +32,7 @@ public class LedFragment extends Fragment {
         return binding.getRoot();
     }
 
+    @RequiresPermission(allOf = {Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT})
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -38,5 +41,34 @@ public class LedFragment extends Fragment {
         // Observa estado
         main.getEstado().observe(getViewLifecycleOwner(),
                 estado -> binding.txtEstado.setText("Estado: " + estado));
+
+        main.getLed().observe(getViewLifecycleOwner(), d -> {
+            if (d != null) {
+                String estadoLed = d.encendido ? "Encendido" : "Apagado";
+                binding.txtLed.setText("Led: " + estadoLed);
+            }
+        });
+
+        // Boton Encender
+        binding.btnOn.setOnClickListener(v -> {
+            if(main.getSocket() != null && main.getSocket().isConnected()){
+                try {
+                    main.getSocket().getOutputStream().write('1');
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        // Boton Apagar
+        binding.btnOff.setOnClickListener(v -> {
+            if(main.getSocket() != null && main.getSocket().isConnected()){
+                try {
+                    main.getSocket().getOutputStream().write('0');
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }

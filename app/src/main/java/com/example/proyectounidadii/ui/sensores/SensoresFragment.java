@@ -68,30 +68,6 @@ public class SensoresFragment extends Fragment {
         });
     }
 
-    @RequiresPermission(allOf = {Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT})
-    private void mostrarEmparejados(MainActivity main) {
-        if (btAdapter == null || !btAdapter.isEnabled()) {
-            toast("Activa Bluetooth");
-            return;
-        }
-
-        Set<BluetoothDevice> paired = btAdapter.getBondedDevices();
-        if (paired.isEmpty()) {
-            toast("Sin dispositivos emparejados");
-            return;
-        }
-
-        List<BluetoothDevice> devs = new ArrayList<>(paired);
-        String[] items = new String[devs.size()];
-        for (int i = 0; i < devs.size(); i++) {
-            items[i] = devs.get(i).getName() + "\n" + devs.get(i).getAddress();
-        }
-
-        new AlertDialog.Builder(getContext()).setTitle("Selecciona dispositivo").setItems(items, (d, idx) -> {
-            // 🔁 usamos el método conectar() de MainActivity
-            main.conectar(devs.get(idx));
-        }).show();
-    }
 
     private void toast(String s) {
         Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show();

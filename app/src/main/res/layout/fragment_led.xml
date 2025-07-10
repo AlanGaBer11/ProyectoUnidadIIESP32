@@ -44,40 +44,41 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:text="Led: Apagado"
+        android:text="Led: "
         android:textColor="#555"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/txt_data"
+        app:layout_constraintBottom_toTopOf="@+id/btn_on"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_estado"
         app:layout_constraintVertical_bias="0.5" />
 
 
-    <EditText
-        android:id="@+id/txt_data"
+    <!-- Boton para enceder el Led -->
+    <Button
+        android:id="@+id/btn_on"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:gravity="center"
-        android:text="Enviar"
-        app:layout_constraintBottom_toTopOf="@+id/btn_send"
+        android:text="Encender"
+        app:layout_constraintBottom_toTopOf="@+id/btn_off"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_led"
         app:layout_constraintVertical_bias="0.5" />
 
-    <!-- Botón para encender el LED -->
+    <!-- Botón para apagar el LED -->
     <Button
-        android:id="@+id/btn_send"
+        android:id="@+id/btn_off"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="Enviar"
+        android:text="Apagar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_data"
+        app:layout_constraintTop_toBottomOf="@+id/btn_on"
         app:layout_constraintVertical_bias="0.5" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresPermission;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -50,12 +51,39 @@ public class MainActivity extends AppCompatActivity {
 
         pedirPermisosBluetooth();
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ListadoFragment()).commit();
+        if (savedInstanceState == null) {
+            showFragment(new ListadoFragment());
+        } else {
+            String fragmentTag = savedInstanceState.getString("currentFragment");
+            if ("second".equals(fragmentTag)) {
+                showFragment(new SensoresFragment());
+            } else if ("third".equals(fragmentTag)) {
+                showFragment(new LedFragment());
+            } else {
+                showFragment(new ListadoFragment());
+            }
+        }
 
         binding.btnListado.setOnClickListener(view -> showFragment(new ListadoFragment()));
         binding.btnSensores.setOnClickListener(view -> showFragment(new SensoresFragment()));
         binding.btnLed.setOnClickListener(view -> showFragment(new LedFragment()));
     }
+
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+
+        if (currentFragment instanceof ListadoFragment) {
+            outState.putString("currentFragment", "first");
+        } else if (currentFragment instanceof SensoresFragment) {
+            outState.putString("currentFragment", "second");
+        } else if (currentFragment instanceof LedFragment) {
+            outState.putString("currentFragment", "third");
+        }
+    }
+
 
     private void showFragment(Fragment fragment) {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
@@ -114,6 +142,10 @@ public class MainActivity extends AppCompatActivity {
         rxThread.start();
     }
 
+    public BluetoothSocket getSocket() {
+        return socket;
+    }
+
     private void leerDatos() {
         byte[] buffer = new byte[1024];
         StringBuilder sb = new StringBuilder();
@@ -159,13 +191,13 @@ public class MainActivity extends AppCompatActivity {
                 fotosensible.postValue(new SharedBluetoothViewModel.FotosensibleData(valor, luz));
                 Log.d("LDR_DATA", "Raw=" + valor + ", Luz=" + luz);
             }
-        } else if (t.startsWith("$MOV")) { // REMPLAZAR POR EL LED
-            if (t.contains("Detectado")) {
-                movimiento.postValue(new SharedBluetoothViewModel.MovimientoData(true));
-                Log.d("MOV_DATA", "Movimiento detectado");
-            } else if (t.contains("No Detectado")) {
-                movimiento.postValue(new SharedBluetoothViewModel.MovimientoData(false));
-                Log.d("MOV_DATA", "Movimiento NO detectado");
+        } else if (t.startsWith("$LED")) {
+            if (t.contains("Encendido")) {
+                led.postValue(new SharedBluetoothViewModel.LedData(true));
+                Log.d("LED_DATA", "LED Encendido");
+            } else if (t.contains("Apagado")) {
+                led.postValue(new SharedBluetoothViewModel.LedData(false));
+                Log.d("LED_DATA", "LED Apagado");
             }
         }
     }
@@ -194,11 +226,12 @@ public class MainActivity extends AppCompatActivity {
         return dht;
     }
 
-    public LiveData<SharedBluetoothViewModel.MovimientoData> getMovimiento() {
-        return movimiento;
-    }
-
     public LiveData<SharedBluetoothViewModel.FotosensibleData> getFotosensible() {
         return fotosensible;
     }
+
+    public LiveData<SharedBluetoothViewModel.LedData> getLed() {
+        return led;
+    }
+
 }

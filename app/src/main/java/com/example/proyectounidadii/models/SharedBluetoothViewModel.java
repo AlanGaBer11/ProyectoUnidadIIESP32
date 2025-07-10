@@ -27,10 +27,10 @@ public class SharedBluetoothViewModel extends ViewModel {
 
     // --- CONTROL DE LED ---
     public static class LedData {
-        public final boolean estado; // true = encendido, false = apagado
+        public final boolean encendido; // true = encendido, false = apagado
 
-        public LedData(boolean estado) {
-            this.estado = estado;
+        public LedData(boolean encendido) {
+            this.encendido = encendido;
 
         }
     }
