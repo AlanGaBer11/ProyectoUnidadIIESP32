@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresPermission;
@@ -24,6 +25,7 @@ import com.example.proyectounidadii.ui.led.LedFragment;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -35,8 +37,10 @@ public class MainActivity extends AppCompatActivity {
 
     private BluetoothSocket socket;
     private InputStream in;
+    private OutputStream out;
     private Thread rxThread;
     private static final UUID SPP_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+    private BluetoothDevice dispositivoGuardado;
 
     private final MutableLiveData<String> estado = new MutableLiveData<>("Desconectado");
     private final MutableLiveData<SharedBluetoothViewModel.DhtData> dht = new MutableLiveData<>();
@@ -62,13 +66,17 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 showFragment(new ListadoFragment());
             }
+
+            String deviceAddress = savedInstanceState.getString("deviceAddress");
+            if (deviceAddress != null) {
+                dispositivoGuardado = BluetoothAdapter.getDefaultAdapter().getRemoteDevice(deviceAddress);
+            }
         }
 
         binding.btnListado.setOnClickListener(view -> showFragment(new ListadoFragment()));
         binding.btnSensores.setOnClickListener(view -> showFragment(new SensoresFragment()));
         binding.btnLed.setOnClickListener(view -> showFragment(new LedFragment()));
     }
-
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
@@ -82,8 +90,35 @@ public class MainActivity extends AppCompatActivity {
         } else if (currentFragment instanceof LedFragment) {
             outState.putString("currentFragment", "third");
         }
+
+        if (dispositivoGuardado != null) {
+            outState.putString("deviceAddress", dispositivoGuardado.getAddress());
+        }
     }
 
+    @RequiresPermission(allOf = {Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT})
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (dispositivoGuardado != null && (socket == null || !socket.isConnected())) {
+            Toast.makeText(this, "Reconectando a " + dispositivoGuardado.getName(), Toast.LENGTH_SHORT).show();
+            conectar(dispositivoGuardado);
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Toast.makeText(this, "Cerrando conexión Bluetooth en onStop()", Toast.LENGTH_SHORT).show();
+        desconectar();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Toast.makeText(this, "onDestroy() ejecutado", Toast.LENGTH_SHORT).show();
+        desconectar();
+    }
 
     private void showFragment(Fragment fragment) {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
@@ -115,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
     public void conectar(BluetoothDevice device) {
         if (rxThread != null) rxThread.interrupt();
         estado.postValue("Conectando...");
+        dispositivoGuardado = device;
 
         rxThread = new Thread(() -> {
             try {
@@ -128,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if (socket.isConnected()) {
                     in = socket.getInputStream();
+                    out = socket.getOutputStream();
                     estado.postValue("Conectado a " + device.getName());
                     leerDatos();
                 } else {
@@ -144,6 +181,10 @@ public class MainActivity extends AppCompatActivity {
 
     public BluetoothSocket getSocket() {
         return socket;
+    }
+
+    public OutputStream getOutputStream() {
+        return out;
     }
 
     private void leerDatos() {
@@ -211,12 +252,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        desconectar();
-    }
-
     // Getters para acceder desde Fragments si es necesario
     public LiveData<String> getEstado() {
         return estado;
@@ -233,5 +268,4 @@ public class MainActivity extends AppCompatActivity {
     public LiveData<SharedBluetoothViewModel.LedData> getLed() {
         return led;
     }
-
 }
