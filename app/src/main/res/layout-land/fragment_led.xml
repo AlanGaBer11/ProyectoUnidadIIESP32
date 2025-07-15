@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/frameLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,28 +16,36 @@
         app:layout_constraintGuide_percent="0.55" />
 
     <!-- Título centrado arriba -->
+
+    <!--  Columna izquierda: estados-->
+
+    <!-- Columna derecha: botones -->
     <TextView
         android:id="@+id/textView"
-        android:layout_width="0dp"
+        android:layout_width="683dp"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="Control de LED"
         android:textSize="26sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/ll_states"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5" />
 
-    <!--  Columna izquierda: estados-->
     <LinearLayout
         android:id="@+id/ll_states"
-        android:layout_width="0dp"
+        android:layout_width="376dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
         android:orientation="vertical"
-        app:layout_constraintEnd_toStartOf="@id/guide_55"
+        app:layout_constraintBottom_toTopOf="@+id/imageView3"
+        app:layout_constraintEnd_toStartOf="@+id/ll_buttons"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textView">
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintVertical_bias="0.5">
 
         <TextView
             android:id="@+id/txt_estado"
@@ -57,16 +66,17 @@
             android:textSize="18sp" />
     </LinearLayout>
 
-    <!-- Columna derecha: botones -->
     <LinearLayout
         android:id="@+id/ll_buttons"
-        android:layout_width="0dp"
+        android:layout_width="307dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
         android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/guide_55"
-        app:layout_constraintTop_toBottomOf="@id/textView">
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/ll_states"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintVertical_bias="0.5">
 
         <Button
             android:id="@+id/btn_on"
@@ -85,4 +95,17 @@
             android:paddingBottom="16dp"
             android:text="Apagar" />
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="155dp"
+        android:layout_height="98dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ll_buttons"
+        app:layout_constraintHorizontal_bias="0.484"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll_states"
+        app:layout_constraintVertical_bias="0.5"
+        app:srcCompat="@drawable/whatsapp_image_2025_07_14_at_3_09_00_pm" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
